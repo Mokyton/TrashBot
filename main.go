@@ -2,14 +2,16 @@ package main
 
 import (
 	"flag"
+	"github.com/Mokyton/TrashBot/clients/telegram"
 	"log"
 )
 
+const (
+	tgBotHost = "api.telegram.org"
+)
+
 func main() {
-	t := mustToken()
-
-	// tgClient = telegram.New(token)
-
+	tgClient := telegram.New(tgBotHost, mustToken())
 	// fetcher = fetcher.New(tgClient)
 
 	// processor = processor.New(tgClient)
