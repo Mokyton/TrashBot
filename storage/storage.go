@@ -2,10 +2,13 @@ package storage
 
 import (
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"github.com/Mokyton/TrashBot/lib/e"
 	"io"
 )
+
+var ErrNoSavedPAges = errors.New("no saved pages")
 
 type Storage interface {
 	Save(p *Page) error
@@ -19,6 +22,7 @@ type Page struct {
 	UserName string
 	//Created time.Time
 }
+
 
 func (p Page) Hash() (string, error) {
 	h := sha1.New()

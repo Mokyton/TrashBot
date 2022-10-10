@@ -1,6 +1,7 @@
 package telegram
 
 import (
+	"errors"
 	"github.com/Mokyton/TrashBot/clients/telegram"
 	"github.com/Mokyton/TrashBot/events"
 	"github.com/Mokyton/TrashBot/lib/e"
@@ -17,6 +18,12 @@ type Meta struct {
 	ChatID   int
 	Username string
 }
+
+var (
+	ErrUnknownEventType = errors.New("unknown event type")
+	errUnknownMetaType = errors.New("unknown meta type")
+)
+
 
 func New(client *telegram.Client, storage storage.Storage) *Processor {
 	return &Processor{
@@ -42,7 +49,32 @@ func (p *Processor) Fetch(limit int) ([]events.Event, error) {
 	}
 
 	p.offset = updates[len(updates)-1].ID + 1
-	
+
+	return res, nil
+}
+
+func (p *Processor) Process(event events.Event) error {
+	switch event.Type {
+	case events.Message:
+		p.processMessage(event)
+	default:
+
+	}
+}
+
+func (p *Processor) processMessage(event events.Event) {
+	meta, err := meta(event)
+	if err != nil {
+		return e.Wrap("can't process mesage", err)
+	}
+
+}
+
+func meta(event events.Event) (Meta, error) {
+	res, ok := event.Meta.(Meta)
+	if !ok {
+		return Meta{},
+	}
 	return res, nil
 }
 
