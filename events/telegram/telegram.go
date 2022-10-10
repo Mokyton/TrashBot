@@ -26,15 +26,24 @@ func New(client *telegram.Client, storage storage.Storage) *Processor {
 }
 
 func (p *Processor) Fetch(limit int) ([]events.Event, error) {
-	update, err := p.tg.Updates(p.offset, limit)
+	updates, err := p.tg.Updates(p.offset, limit)
 	if err != nil {
 		return nil, e.Wrap("can't get events", err)
 	}
-	res := make([]events.Event, 0, len(update))
 
-	for _, u := range update {
+	if len(updates) == 0 {
+		return nil, nil
+	}
+
+	res := make([]events.Event, 0, len(updates))
+
+	for _, u := range updates {
 		res = append(res, event(u))
 	}
+
+	p.offset = updates[len(updates)-1].ID + 1
+	
+	return res, nil
 }
 
 func event(upd telegram.Update) events.Event {
@@ -44,10 +53,12 @@ func event(upd telegram.Update) events.Event {
 		Text: fetchText(upd),
 	}
 	if updType == events.Message {
-		res.Meta{
-
+		res.Meta = Meta{
+			ChatID:   upd.Message.Chat.ID,
+			Username: upd.Message.From.Username,
 		}
 	}
+	return res
 }
 
 func fetchType(upd telegram.Update) events.Type {
