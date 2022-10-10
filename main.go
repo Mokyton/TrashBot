@@ -2,18 +2,22 @@ package main
 
 import (
 	"flag"
-	"github.com/Mokyton/TrashBot/clients/telegram"
+	tgClient "github.com/Mokyton/TrashBot/clients/telegram"
+	"github.com/Mokyton/TrashBot/events/telegram"
+	"github.com/Mokyton/TrashBot/storage/files"
 	"log"
 )
 
 const (
-	tgBotHost = "api.telegram.org"
+	tgBotHost   = "api.telegram.org"
+	storagePath = "storage"
 )
 
 func main() {
-	tgClient := telegram.New(tgBotHost, mustToken())
-	// fetcher = fetcher.New(tgClient)
-
+	eventsProcessor := telegram.New(
+		tgClient.New(tgBotHost, mustToken()),
+		files.New(storagePath),
+		)
 	// processor = processor.New(tgClient)
 
 	// consumer.Start(fetcher, processor)
