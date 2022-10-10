@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/Mokyton/TrashBot/lib/e"
 	"github.com/Mokyton/TrashBot/storage"
-	"github.com/Mokyton/TrashBot/storage/files"
 	"log"
 	"net/url"
 	"strings"
@@ -68,7 +67,7 @@ func (p *Processor) SendRandom(chatID int, username string) (err error) {
 	defer func() { err = e.WrapIfErr("can't do command: can't send random", err) }()
 
 	page, err := p.storage.PickRandom(username)
-	if err != nil && !errors.Is(err, files.ErrNoSavedPAges) {
+	if err != nil && !errors.Is(err, storage.ErrNoSavedPAges) {
 		return err
 	}
 	if errors.Is(err, storage.ErrNoSavedPAges) {

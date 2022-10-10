@@ -32,7 +32,7 @@ func (c Consumer) Start() error {
 			continue
 		}
 		if err := c.handleEvents(gotEvents); err != nil {
-			log.Printf(err)
+			log.Printf("handleEvents error")
 			continue
 		}
 	}
@@ -46,4 +46,5 @@ func (c *Consumer) handleEvents(events []events.Event) error {
 			continue
 		}
 	}
+	return nil
 }
