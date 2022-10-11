@@ -26,8 +26,8 @@ var (
 
 func New(client *telegram.Client, storage storage.Storage) *Processor {
 	return &Processor{
-		tg:      nil,
-		storage: nil,
+		tg:      client,
+		storage: storage,
 	}
 }
 

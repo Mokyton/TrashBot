@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	RndCmd   = "/rund"
+	RndCmd   = "/rnd"
 	HelpCmd  = "/help"
 	StartCmd = "/start"
 )
